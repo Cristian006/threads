@@ -173,7 +173,7 @@ const events = [
     "title": "Jones Jr. vs. Combs Lawsuit",
     "description": "Producer Rodney Jones Jr. files a lawsuit alleging sexual assault by Combs.",
     "event_type": ["Legal"]
-  }
+  },
 ]
 
 export { events, artists }

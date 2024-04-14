@@ -15,3 +15,23 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+.link {
+  cursor: pointer;
+}
+
+.node {
+  cursor: pointer;
+}
+
+.title {
+  border-radius: 2px;
+}
+
+.horizontal-timeline {
+  @apply bg-neutral-900;
+}
+
+.lane-label {
+  @apply fill-white;
+}
