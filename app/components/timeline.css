@@ -1,0 +1,31 @@
+.timeline-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Additional styles for the timeline component */
+.react-gantt-timeline {
+  font-family: 'Roboto', sans-serif;
+}
+
+.react-gantt-timeline .row {
+  background-color: #fff;
+}
+
+.react-gantt-timeline .row:hover {
+  background-color: #f5f5f5;
+}
+
+.react-gantt-timeline .bar {
+  border-radius: 4px;
+}

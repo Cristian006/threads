@@ -3,12 +3,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MultiTimelineScrubber from './multiTimelineScrubber';
 import Sidebar from './sideBar';
-import { events, entities } from '../../data/diddy';
+import { events, entities } from '../../data/jfk';
 import TemporalForceDirectedGraph from './temporalGraphSize';
+import Threads from './threads';
 import GraphLayout from './graphLayout';
 import { formatDateStr } from '@/lib/utils/time';
 import { ZoomIn, ZoomOut, } from 'lucide-react';
 import { Button } from './button';
+import HorizontalTimeline from './horizontalTimeline';
 
 
 function useContainerSize(containerRef) {
@@ -64,7 +66,12 @@ export default function GraphView() {
       }
       openSideBar={!!selectedLinkEvents}
       bottomContent={dates.length > 0 && (
-        <MultiTimelineScrubber onCurrentTimeChanged={setCurrentDate} events={events} entities={entities} />
+        <div style={{ height: 300, width: '100%' }}>
+
+          <HorizontalTimeline events={events} />
+        </div>
+
+        /*<MultiTimelineScrubber onCurrentTimeChanged={setCurrentDate} events={events} entities={entities} /> */
       )}
       topLeftContent={(
         <div>
@@ -85,7 +92,7 @@ export default function GraphView() {
       }
       containerRef={containerRef}
     >
-      <TemporalForceDirectedGraph
+      <Threads
         events={events}
         entities={entities}
         currentDate={currentDate}
@@ -93,6 +100,16 @@ export default function GraphView() {
         containerHeight={containerHeight}
         containerWidth={containerWidth}
       />
+      {
+        /**      <TemporalForceDirectedGraph
+              events={events}
+              entities={entities}
+              currentDate={currentDate}
+              setSelectedLinkEvents={setSelectedLinkEvents}
+              containerHeight={containerHeight}
+              containerWidth={containerWidth}
+            /> */
+      }
     </GraphLayout>
   );
 }

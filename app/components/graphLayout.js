@@ -5,8 +5,8 @@ import 'react-resizable/css/styles.css';
 export default function GraphLayout({ children, topLeftContent, topRightContent, sidebarContent, bottomContent, containerRef, openSideBar }) {
   // Inline style for the encoded SVG background pattern
   const gridPatternStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='%234A5568' /%3E%3C/svg%3E")`,
-    backgroundSize: '20px 20px',
+    // backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='%234A5568' /%3E%3C/svg%3E")`,
+    //backgroundSize: '20px 20px',
   };
 
   return (

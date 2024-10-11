@@ -17,29 +17,18 @@ const calculateAge = (dob, eventDate) => {
 function Sidebar({ events, entities, onClose }) {
   // Helper function to find artist information by ID
   const getArtistInfo = (entityId) => {
-    return entities.find(entity => entity.id.toLowerCase() === entityId.toLowerCase() || entityId.toLowerCase() === entity.name.toLowerCase());
+    return entities.find(entity => entity.id === entityId || entityId === entity.name);
   }
-
-  // Function to render the artists' images for the first event
-  const renderFirstEventArtistsImages = () => {
-    return events && events[0].parties.map(entityId => {
-      const entity = getArtistInfo(entityId);
-      return entity ? (
-        <img key={`image-${entity.id}`} src={entity.image} alt={entity.name} className="w-16 h-16 rounded-full inline-block m-2 border-white border-2 object-cover" />
-      ) : null;
-    });
-  };
 
   return (
     <div style={{ width: '30rem' }} className="h-full overflow-auto border-l border-l-black bg-card text-card-foreground shadow dark:bg-black-900">
       <div>
-        <button onClick={onClose} className="mb-4 px-4 py-2 text-sm font-semibold rounded hover:bg-red-600 focus:outline-none">
+        <button onClick={onClose} className="mb-4 px-1 py-1 text-sm font-semibold rounded hover:bg-red-400 focus:outline-none">
           <X />
         </button>
         <div className="text-center mb-4">
-          {events && events.length > 0 && renderFirstEventArtistsImages()}
+          Timeline
         </div>
-        <h1 className="text-center mb-4">{events && events.length > 0 ? events[0].parties.filter(x => !!getArtistInfo(x.toLowerCase())).map(entityId => getArtistInfo(entityId.toLowerCase()).name).join(' <> ') : ""}</h1>
         <ul className="pl-8">
           {events && events.sort((a, b) => new Date(a.approxStart) - new Date(b.approxStart)).map((event, index) => (
             <div key={index} className="relative pb-8">

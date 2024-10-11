@@ -59,7 +59,6 @@ function TemporalForceDirectedGraph({ events, entities, currentDate, setSelected
       }
     });
 
-    console.log(nodesArray);
 
     setNodes(nodesArray);
     setLinks(newLinks);
@@ -129,10 +128,19 @@ function TemporalForceDirectedGraph({ events, entities, currentDate, setSelected
       .attr("stroke-width", 1)
       .on("mouseover", function (event, d) {
         d3.select(this).attr("stroke", "#ff474c").attr("stroke-width", 3); // Change outline to red and make it thicker on hover
-        // Optionally, you can show additional tooltip info here
+
+        // TODO: Tooltip
+        // Highlight links connected to this node and dim others
+        link.style("stroke", l => (l.source.id === d.id || l.target.id === d.id) ? "#ff474c" : "#eee")
+          .style("stroke-opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.1);
+
       })
       .on("mouseout", function (event, d) {
         d3.select(this).attr("stroke", d.color).attr("stroke-width", 1); // Revert stroke changes
+
+        // Reset link styles
+        link.style("stroke", "#ff474c")
+          .style("stroke-opacity", 1);
       })
       .call(drag(simulation));
 
