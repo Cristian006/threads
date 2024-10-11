@@ -1,5 +1,5 @@
 import { Inconsolata } from "next/font/google";
-import { ThemeProvider } from "./components/theme/themeProvider";
+import { ThemeProvider } from "@/components/theme/provider";
 import "./globals.css";
 
 const inter = Inconsolata({ subsets: ["latin"] });
@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

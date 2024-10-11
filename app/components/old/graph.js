@@ -1,16 +1,16 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import MultiTimelineScrubber from './multiTimelineScrubber';
-import Sidebar from './sideBar';
-import { events, entities } from '../../data/jfk';
-import TemporalForceDirectedGraph from './temporalGraphSize';
-import Threads from './threads';
-import GraphLayout from './graphLayout';
+import MultiTimelineScrubber from '../multiTimelineScrubber';
+import Sidebar from '../sideBar';
+import { events, entities } from '../../../data/jfk';
+import TemporalForceDirectedGraph from '../temporalGraphSize';
+import Threads from '../threads';
+import GraphLayout from '../graphLayout';
 import { formatDateStr } from '@/lib/utils/time';
 import { ZoomIn, ZoomOut, } from 'lucide-react';
 import { Button } from './button';
-import HorizontalTimeline from './horizontalTimeline';
+import HorizontalTimeline from '../horizontalTimeline';
 
 
 function useContainerSize(containerRef) {
