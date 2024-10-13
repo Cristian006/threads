@@ -406,13 +406,30 @@ const GanttChart = ({ events }) => {
           </div>
         </div>
 
-        <div className="">
+        <div className="relative">
+          {/* Reference lines */}
+          <div className="absolute top-0 bottom-0 left-48 right-0">
+            {timelineHeaders.map((year, index) => {
+              const headerStartDate = new Date(year, 0, 0);
+              const headerStartOffsetMs = headerStartDate.getTime() - minVisibleDate.getTime();
+              const offsetPercentage = (headerStartOffsetMs / visibleTimeRangeMs) * 100;
+              
+              return (
+                <div
+                  key={year}
+                  className="absolute top-0 bottom-0 w-px bg-gray-400 opacity-10"
+                  style={{ left: `${offsetPercentage}%` }}
+                ></div>
+              );
+            })}
+          </div>
+
           {/* Grouped Events with Legend */}
           {Object.entries(groupedEvents).map(([source, sourceEvents], idx) => (
             <div key={source} className="my-6 pl-2 border-l-4 border-solid select-none" style={{ borderColor: getColorBySource(source, idx) }}>
               {/* Legend for this source */}
               <div className="flex items-center mb-2">
-                <span className="font-semibold">{source}</span>
+                <span className="font-semibold max-w-48 truncate" title={source}>{source}</span>
               </div>
 
               {/* Event Bars for this source */}
@@ -425,28 +442,22 @@ const GanttChart = ({ events }) => {
                   eventEnd.setDate(eventEnd.getDate() + 1);
                 }
 
-                const eventStartMs = Math.max(
-                  eventStart.getTime(),
-                  minVisibleDate.getTime()
-                );
-                const eventEndMs = Math.min(
-                  eventEnd.getTime(),
-                  maxVisibleDate.getTime()
-                );
+                const eventStartMs = eventStart.getTime();
+                const eventEndMs = eventEnd.getTime();
 
-                if (eventEndMs <= eventStartMs) {
-                  // Event is not visible in the current time range
+                // Check if the event is within the visible range
+                if (eventEndMs <= minVisibleDate.getTime() || eventStartMs >= maxVisibleDate.getTime()) {
                   return null;
                 }
 
-                const eventStartOffsetMs = eventStartMs - minVisibleDate.getTime();
-                const eventEndOffsetMs = eventEndMs - minVisibleDate.getTime();
-                const eventDurationMs = eventEndOffsetMs - eventStartOffsetMs;
+                const visibleStartMs = Math.max(eventStartMs, minVisibleDate.getTime());
+                const visibleEndMs = Math.min(eventEndMs, maxVisibleDate.getTime());
 
-                const offsetPercentage =
-                  (eventStartOffsetMs / visibleTimeRangeMs) * 100;
-                const durationPercentage =
-                  (eventDurationMs / visibleTimeRangeMs) * 100;
+                const eventStartOffsetMs = visibleStartMs - minVisibleDate.getTime();
+                const eventDurationMs = visibleEndMs - visibleStartMs;
+
+                const offsetPercentage = (eventStartOffsetMs / visibleTimeRangeMs) * 100;
+                const durationPercentage = (eventDurationMs / visibleTimeRangeMs) * 100;
 
                 // Ensure a minimum width for very short events
                 const minWidth = 0.5; // 0.5% of the visible range
@@ -454,7 +465,7 @@ const GanttChart = ({ events }) => {
 
                 return (
                   <div key={event.id} className="flex items-center mt-1.5">
-                    <div className="w-48 text-base flex-shrink-0">{event.name}</div>
+                    <div className="w-48 text-base flex-shrink-0 truncate " title={event.name}>{event.name}</div>
                     <div
                       className="relative h-10 w-full overflow-hidden select-none"
                       onMouseDown={handleMouseDown}
@@ -472,8 +483,8 @@ const GanttChart = ({ events }) => {
                         title={`${event.name}\nSource: ${event.source}\nDate: ${event.start} to ${event.end}`}
                       >
                         <div className="text-sm absolute top-0 left-0 text-nowrap pl-2">
-                            <div className="font-semibold">{event.name}</div>
-                            <div className="text-xs">{event.start}{event.end && event.end !== event.start && ` - ${event.end}`}</div>
+                          <div className="font-semibold">{event.name}</div>
+                          <div className="text-xs">{event.start}{event.end && event.end !== event.start && ` - ${event.end}`}</div>
                         </div>
                       </div>
                     </div>
