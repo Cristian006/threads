@@ -12,10 +12,13 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button"; // Assuming you have a Button component
+import EventTimeline from '@/components/timeline';
+import Graph from '@/components/graph';
 
 export default function Home() {
   const [selectedEvents, setSelectedEvents] = useState(covidEvents);
   const [eventLabel, setEventLabel] = useState("COVID Events");
+  const [selectedRange, setSelectedRange] = useState(null);
 
   const handleEventChange = (eventType) => {
     if (eventType === 'covid') {
@@ -27,18 +30,27 @@ export default function Home() {
     }
   };
 
+  const handleRangeChange = (range) => {
+    setSelectedRange(range);
+  };
+
   return (
     <main>
       <div className="h-screen w-screen overflow-hidden">
         <PanelGroup direction="vertical">
           <Panel minSize={20}>
             <PanelGroup direction="horizontal">
-              <Panel minSize={20}>
+              <Panel minSize={20} defaultSize={70}>
                 <div className="h-full flex flex-col relative">
-                  <div className="flex-1 p-4">
+                  <div className="flex-1">
+                    <div className="h-full w-full">
+                      <Graph events={selectedEvents} selectedRange={selectedRange} />
+                    </div>
+                  </div>
+                  <div className="absolute top-0 left-0 right-0 p-2 flex justify-between">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start">
+                        <Button variant="outline" className="justify-start">
                           {eventLabel}
                         </Button>
                       </DropdownMenuTrigger>
@@ -51,17 +63,14 @@ export default function Home() {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </div>
-                  <div className="absolute bottom-0 left-0 p-2">
                     <ModeToggle />
                   </div>
                 </div>
               </Panel>
               <PanelResizeHandle className="w-0.5 bg-gray-100/20 hover:bg-gray-300/50 transition-colors" />
               <Panel minSize={20} maxSize={30} defaultSize={30}>
-                <div className="h-full">
-                  {/* Content for the top-right panel */}
-                  Top Right Panel
+                <div className="h-full overflow-y-auto">
+                  <EventTimeline events={selectedEvents} selectedRange={selectedRange} />
                 </div>
               </Panel>
             </PanelGroup>
@@ -69,7 +78,7 @@ export default function Home() {
           <PanelResizeHandle className="h-0.5 bg-gray-100/20 hover:bg-gray-300/50 transition-colors" />
           <Panel minSize={24}>
             <div className="h-full flex flex-col">
-              <GanttChart events={selectedEvents} />
+              <GanttChart events={selectedEvents} onRangeChange={handleRangeChange} />
             </div>
           </Panel>
         </PanelGroup>

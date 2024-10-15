@@ -4,9 +4,9 @@ import { Button } from '../ui/button';
 import { ResetIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns'; // Add this import at the top of the file
 
-const PADDING = 365 * 2 // day +/- to the min and max date to calculate the overall time range
+const PADDING = 1 // day +/- to the min and max date to calculate the overall time range
 
-const GanttChart = ({ events }) => {
+const GanttChart = ({ events, onRangeChange }) => {
   // Calculate the overall time range
   const getTimeRange = (events) => {
     const dates = events.flatMap((event) => [
@@ -172,6 +172,12 @@ const GanttChart = ({ events }) => {
     setPanOffset(0);
     setBrushStart(null);
     setBrushEnd(null);
+    
+    // Trigger onRangeChange with default start and end dates
+    onRangeChange({
+      start: minDate,
+      end: maxDate
+    });
   };
 
   // Update visible date range when brush changes
@@ -185,8 +191,14 @@ const GanttChart = ({ events }) => {
 
       setZoomLevel(newZoomLevel);
       setPanOffset(newPanOffset);
+
+      // Pass the selected range to the parent component
+      onRangeChange({
+        start: new Date(newMinVisibleDateMs),
+        end: new Date(newMaxVisibleDateMs)
+      });
     }
-  }, [brushStart, brushEnd, minDate, totalTimeRangeMs, visibleTimeRangeMs]);
+  }, [brushStart, brushEnd, minDate, totalTimeRangeMs, visibleTimeRangeMs, onRangeChange]);
 
   // Group events by source
   const groupedEvents = events.reduce((acc, event) => {
@@ -282,7 +294,12 @@ const GanttChart = ({ events }) => {
             {visibleDateRange}
           </div>
           <div className="flex-1 flex justify-end">
-            <Button disabled={brushStart === null && brushEnd === null} size="icon" variant="ghost" onClick={resetZoom}>
+            <Button 
+              disabled={brushStart === null && brushEnd === null} 
+              size="icon" 
+              variant="ghost" 
+              onClick={resetZoom}
+            >
               <ResetIcon />
             </Button>
           </div>
